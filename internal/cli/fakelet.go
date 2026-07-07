@@ -6,14 +6,14 @@ import (
 	"github.com/frailmink/fakernetes/internal/fakelet"
 )
 
-var fakeletCmd = &cobra.Command{
-	Use:   "fakelet [options]",
-	Short: "fakelet will monitor the pods and start up the containers",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return fakelet.Execute()
-	},
-}
+func NewFakeletSubCommand(rootCmd *cobra.Command, rootCfg *RootCfg) {
+ 	fakeletCmd := &cobra.Command{
+		Use:   "fakelet [options]",
+		Short: "fakelet will monitor the pods and start up the containers",
+		RunE: commandExecWrapper(rootCfg, func(cmd *cobra.Command, args []string) error {
+			return fakelet.Execute(rootCfg.Logger)
+		}),
+	}
 
-func init()  {
 	rootCmd.AddCommand(fakeletCmd)
 }
