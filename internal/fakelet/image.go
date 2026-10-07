@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-
-	containerd "github.com/containerd/containerd/v2/client"
 )
 
 type runImageInputs struct {

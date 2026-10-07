@@ -25,7 +25,7 @@ func NewRootCmd(cfg *RootCfg) *cobra.Command {
 }
 
 func Execute(rootCmd *cobra.Command, rootCfg *RootCfg) error {
-	NewFakeletSubCommand(rootCmd, rootCfg)
+	newFakeletSubCommand(rootCmd, rootCfg)
 
 	return rootCmd.Execute()
 }

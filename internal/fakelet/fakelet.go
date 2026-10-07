@@ -7,9 +7,19 @@ import (
 	"github.com/frailmink/fakernetes/internal/server"
 )
 
-func Execute(logger *slog.Logger) error {
-	router := http.NewServeMux()
-	router.HandleFunc("/image", server.RouteFuncWrapper([]string{http.MethodPost}, logger, RunImage))
+type FakeletConfig struct {
+	ContainerdSocket string
+	Logger *slog.Logger
+}
 
-	return server.StartServer(router, ":1000", logger)
+func Execute(config FakeletConfig) error {
+	_, err := startUpContainerd(config.ContainerdSocket, config.Logger)
+	if err != nil {
+		return err
+	}
+
+	router := http.NewServeMux()
+	router.HandleFunc("/image", server.RouteFuncWrapper([]string{http.MethodPost}, config.Logger, RunImage))
+
+	return server.StartServer(router, ":1000", config.Logger)
 }
